@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Fluxos Arquiteturais — Sistema de Métricas de Percepção</title>
+<style>
+* { box-sizing: border-box; }
+body { font-family: 'Segoe UI', sans-serif; background: #eef0f4; margin: 0; padding: 32px 24px; }
+.header { max-width: 960px; margin: 0 auto 28px; }
+h1 { color: #1a1a2e; font-size: 22px; margin: 0 0 6px; }
+.sub { color: #555; font-size: 14px; margin: 0; }
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 960px; margin: 0 auto; }
+.flow-card { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); border-top: 5px solid #ccc; text-decoration: none; color: inherit; display: block; transition: box-shadow 0.15s, transform 0.15s; }
+.flow-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.14); transform: translateY(-2px); }
+.flow-card.c1 { border-top-color: #1565c0; }
+.flow-card.c2 { border-top-color: #7b1fa2; }
+.flow-card.c3 { border-top-color: #2e7d32; }
+.flow-icon { font-size: 36px; margin-bottom: 12px; }
+.flow-num { font-size: 11px; font-weight: 700; color: #aaa; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 4px; }
+.flow-title { font-size: 16px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+.flow-desc { font-size: 12px; color: #666; line-height: 1.6; margin-bottom: 14px; }
+.flow-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.tag { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; }
+.tag-blue { background: #e3f2fd; color: #1565c0; }
+.tag-purple { background: #f3e5f5; color: #7b1fa2; }
+.tag-green { background: #e8f5e9; color: #2e7d32; }
+.tag-orange { background: #fff3e0; color: #e65100; }
+.tag-dark { background: #eceff1; color: #455a64; }
+.flow-steps { font-size: 11px; color: #888; margin-top: 10px; }
+.footer { text-align: center; font-size: 11px; color: #aaa; margin-top: 28px; max-width: 960px; margin-left: auto; margin-right: auto; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📐 Fluxos Arquiteturais — Sistema de Métricas de Percepção</h1>
+  <p class="sub">Diagramas de sequência baseados no DAS. Cada fluxo mostra a interação dos microserviços, o uso do broker e as operações em banco de dados próprio por domínio.</p>
+</div>
+
+<div class="grid">
+
+  <!-- FLUXO 1 -->
+  <a href="01-criacao-pesquisa.html" class="flow-card c1">
+    <div class="flow-icon">🏗️</div>
+    <div class="flow-num">Fluxo 1</div>
+    <div class="flow-title">Criação e Publicação de Pesquisa</div>
+    <div class="flow-desc">
+      A Gestão define, versiona e publica a pesquisa. O evento imutável
+      <code>PesquisaVersaoPublicada.v1</code> é consumido por Seleção, Execução e Apuração,
+      que materializam localmente o que precisam em seus próprios bancos.
+    </div>
+    <div class="flow-tags">
+      <span class="tag tag-blue">Gestão</span>
+      <span class="tag tag-dark">Broker</span>
+      <span class="tag tag-orange">Seleção</span>
+      <span class="tag tag-green">Execução</span>
+      <span class="tag tag-purple">Apuração</span>
+    </div>
+    <div class="flow-steps">11 passos · Gatilho: Admin publica versão</div>
+  </a>
+
+  <!-- FLUXO 2 -->
+  <a href="02-fluxo-assincrono.html" class="flow-card c2">
+    <div class="flow-icon">⚡</div>
+    <div class="flow-num">Fluxo 2</div>
+    <div class="flow-title">Ingestão Assíncrona de Atendimento</div>
+    <div class="flow-desc">
+      Um sistema externo envia um atendimento. A Ingestão valida tecnicamente.
+      A Seleção decide a elegibilidade. A Execução cria a instância.
+      A Entrega executa o envio técnico do convite via plataforma de comunicação.
+    </div>
+    <div class="flow-tags">
+      <span class="tag tag-purple">Ingestão</span>
+      <span class="tag tag-dark">Broker</span>
+      <span class="tag tag-orange">Seleção</span>
+      <span class="tag tag-green">Execução</span>
+      <span class="tag tag-blue">Entrega</span>
+    </div>
+    <div class="flow-steps">15 passos · Gatilho: Sistema externo envia atendimento</div>
+  </a>
+
+  <!-- FLUXO 3 -->
+  <a href="03-fluxo-sincrono.html" class="flow-card c3">
+    <div class="flow-icon">📱</div>
+    <div class="flow-num">Fluxo 3</div>
+    <div class="flow-title">Canal Digital: Solicitar e Responder</div>
+    <div class="flow-desc">
+      Duas fases síncronas. Fase 1: canal solicita pesquisa — Execução consulta Seleção
+      e resolve placeholders via SICLI/SIISO/LDAP. Fase 2: respondente responde —
+      Execução confirma imediatamente e Apuração calcula de forma assíncrona.
+    </div>
+    <div class="flow-tags">
+      <span class="tag tag-green">Execução</span>
+      <span class="tag tag-orange">Seleção</span>
+      <span class="tag tag-blue">SICLI/LDAP</span>
+      <span class="tag tag-dark">Broker</span>
+      <span class="tag tag-purple">Apuração</span>
+    </div>
+    <div class="flow-steps">16 passos · Fases: Solicitar + Responder</div>
+  </a>
+
+</div>
+
+<div class="footer">
+  Baseado no DAS do Sistema de Métricas de Percepção · Regras de fronteira: cada serviço tem persistência própria · Sem acesso cruzado de banco
+</div>
+
+</body>
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Fluxo 2 — Ingestão Assíncrona de Atendimento</title>
+<style>
+* { box-sizing: border-box; }
+body { font-family: 'Segoe UI', sans-serif; background: #eef0f4; margin: 0; padding: 24px; }
+.card { background: white; border-radius: 12px; padding: 24px 28px; box-shadow: 0 2px 16px rgba(0,0,0,0.09); max-width: 1340px; margin: 0 auto; overflow-x: auto; }
+h1 { color: #1a1a2e; font-size: 19px; margin: 0 0 6px; }
+.badge { display: inline-block; background: #f3e5f5; color: #7b1fa2; font-size: 11px; font-weight: 700; padding: 2px 10px; border-radius: 20px; margin-left: 10px; vertical-align: middle; }
+.desc { color: #555; font-size: 13px; line-height: 1.6; margin-bottom: 18px; max-width: 900px; }
+.legenda { display: flex; gap: 22px; flex-wrap: wrap; border-top: 1px solid #eee; padding-top: 14px; margin-top: 10px; align-items: center; }
+.leg { display: flex; align-items: center; gap: 7px; font-size: 11px; color: #555; }
+.leg-sq { width: 13px; height: 13px; border-radius: 3px; flex-shrink: 0; }
+.leg-solid { width: 34px; height: 2px; background: #555; }
+.leg-dash { width: 34px; height: 0; border-top: 2px dashed #777; }
+.nav { font-size: 12px; margin-bottom: 16px; }
+.nav a { color: #1565c0; text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="nav"><a href="index.html">← Voltar ao índice</a></div>
+  <h1>⚡ Fluxo 2 — Ingestão Assíncrona de Atendimento <span class="badge">Gatilho: Sistema externo envia atendimento</span></h1>
+  <p class="desc">
+    A Ingestão atua como fronteira técnica: apenas valida e normaliza a entrada. Ela <strong>não decide elegibilidade</strong>.
+    A Seleção é o único domínio que decide se haverá pesquisa. Se elegível, cria a Oportunidade.
+    A Execução transforma a oportunidade em instância concreta. A Entrega executa o ciclo técnico do envio.
+  </p>
+
+<svg width="1280" height="900" viewBox="0 0 1280 900" style="display:block">
+<defs>
+  <marker id="f2-ah" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+    <path d="M1,0 L1,6 L9,3 z" fill="#444"/>
+  </marker>
+  <marker id="f2-ah-p" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+    <path d="M1,0 L1,6 L9,3 z" fill="#7b1fa2"/>
+  </marker>
+  <marker id="f2-ah-k" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+    <path d="M1,0 L1,6 L9,3 z" fill="#455a64"/>
+  </marker>
+  <marker id="f2-ah-o" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+    <path d="M1,0 L1,6 L9,3 z" fill="#bf360c"/>
+  </marker>
+  <marker id="f2-ah-g" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+    <path d="M1,0 L1,6 L9,3 z" fill="#2e7d32"/>
+  </marker>
+  <marker id="f2-ah-t" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+    <path d="M1,0 L1,6 L9,3 z" fill="#006064"/>
+  </marker>
+  <marker id="f2-ah-s" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+    <path d="M1,0 L1,6 L9,3 z" fill="#546e7a"/>
+  </marker>
+</defs>
+
+<rect width="1280" height="900" fill="#fafbfc" rx="8"/>
+<rect x="0" y="80" width="34" height="790" fill="#f0f2f5" rx="4"/>
+
+<!-- ===== PARTICIPANT HEADERS (7 participants) ===== -->
+<!-- cx=80 Sistema Externo -->
+<rect x="10" y="14" width="140" height="54" rx="8" fill="#546e7a"/>
+<text x="80" y="35" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="Segoe UI,sans-serif">Sistema Externo</text>
+<text x="80" y="56" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="10" font-family="Segoe UI,sans-serif">Ex: Sistema de Atend.</text>
+
+<!-- cx=255 Ingestão -->
+<rect x="185" y="14" width="140" height="54" rx="8" fill="#7b1fa2"/>
+<text x="255" y="35" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="Segoe UI,sans-serif">Ingestão de Origens</text>
+<text x="255" y="56" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="10" font-family="Segoe UI,sans-serif">Fronteira técnica · DB próprio</text>
+
+<!-- cx=440 Broker -->
+<rect x="370" y="14" width="140" height="54" rx="8" fill="#455a64"/>
+<text x="440" y="35" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="Segoe UI,sans-serif">Broker (Kafka)</text>
+<text x="440" y="56" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="10" font-family="Segoe UI,sans-serif">Mensageria assíncrona</text>
+
+<!-- cx=625 Seleção -->
+<rect x="555" y="14" width="140" height="54" rx="8" fill="#bf360c"/>
+<text x="625" y="35" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="Segoe UI,sans-serif">Seleção</text>
+<text x="625" y="56" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="10" font-family="Segoe UI,sans-serif">Decide elegibilidade · DB próprio</text>
+
+<!-- cx=810 Execução -->
+<rect x="740" y="14" width="140" height="54" rx="8" fill="#2e7d32"/>
+<text x="810" y="35" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="Segoe UI,sans-serif">Execução</text>
+<text x="810" y="56" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="10" font-family="Segoe UI,sans-serif">Runtime · DB próprio</text>
+
+<!-- cx=990 Entrega -->
+<rect x="920" y="14" width="140" height="54" rx="8" fill="#006064"/>
+<text x="990" y="35" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="Segoe UI,sans-serif">Entrega de Convites</text>
+<text x="990" y="56" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="10" font-family="Segoe UI,sans-serif">Envio técnico · DB próprio</text>
+
+<!-- cx=1175 Plataforma Comunicação -->
+<rect x="1105" y="14" width="140" height="54" rx="8" fill="#4e342e"/>
+<text x="1175" y="35" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="Segoe UI,sans-serif">Plat. Comunicação</text>
+<text x="1175" y="56" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="10" font-family="Segoe UI,sans-serif">Email / SMS / Push</text>
+
+<!-- ===== LIFELINES ===== -->
+<line x1="80"   y1="68" x2="80"   y2="870" stroke="#546e7a" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.28"/>
+<line x1="255"  y1="68" x2="255"  y2="870" stroke="#7b1fa2" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.28"/>
+<line x1="440"  y1="68" x2="440"  y2="870" stroke="#455a64" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.28"/>
+<line x1="625"  y1="68" x2="625"  y2="870" stroke="#bf360c" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.28"/>
+<line x1="810"  y1="68" x2="810"  y2="870" stroke="#2e7d32" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.28"/>
+<line x1="990"  y1="68" x2="990"  y2="870" stroke="#006064" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.28"/>
+<line x1="1175" y1="68" x2="1175" y2="870" stroke="#4e342e" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.28"/>
+
+<!-- Activation bars -->
+<rect x="251" y="108" width="8" height="195" rx="2" fill="#7b1fa2" opacity="0.18"/>
+<rect x="436" y="310" width="8" height="390" rx="2" fill="#455a64" opacity="0.13"/>
+<rect x="621" y="365" width="8" height="200" rx="2" fill="#bf360c" opacity="0.18"/>
+<rect x="806" y="560" width="8" height="130" rx="2" fill="#2e7d32" opacity="0.18"/>
+<rect x="986" y="705" width="8" height="80" rx="2" fill="#006064" opacity="0.18"/>
+
+<!-- ===== STEP 1: SistExt → Ingestão ===== -->
+<circle cx="17" cy="120" r="13" fill="#546e7a"/>
+<text x="17" y="124" text-anchor="middle" fill="white" font-size="10" font-weight="700" font-family="Segoe UI,sans-serif">1</text>
+<line x1="82" y1="120" x2="246" y2="120" stroke="#7b1fa2" stroke-width="2" marker-end="url(#f2-ah-p)"/>
+<text x="164" y="113" text-anchor="middle" fill="#7b1fa2" font-size="11" font-weight="600" font-family="Segoe UI,sans-serif">POST /ingestao/atendimentos</text>
+
+<!-- ===== STEP 2: Ingestão — valida ===== -->
+<circle cx="17" cy="172" r="13" fill="#7b1fa2"/>
+<text x="17" y="176" text-anchor="middle" fill="white" font-size="10" font-weight="700" font-family="Segoe UI,sans-serif">2</text>
+<line x1="259" y1="172" x2="270" y2="172" stroke="#7b1fa2" stroke-width="1" stroke-dasharray="3,2"/>
+<rect x="270" y="157" width="225" height="44" rx="5" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="1.2"/>
+<text x="286" y="175" fill="#4a0072" font-size="11" font-weight="700" font-family="Segoe UI,sans-serif">Valida tecnicamente + normaliza</text>
+<text x="286" y="191" fill="#7b1fa2" font-size="10" font-family="Segoe UI,sans-serif">Grava origem_recebida no DB próprio</text>
+
+<!-- ===== STEP 3: Ingestão — outbox ===== -->
+<circle cx="17" cy="228" r="13" fill="#7b1fa2"/>
+<text x="17" y="232" text-anchor="middle" fill="white" font-size="10" font-weight="700" font-family="Segoe UI,sans-serif">3</text>
+<line x1="259" y1="228" x2="270" y2="228" stroke="#7b1fa2" stroke-width="1" stroke-dasharray="3,2"/>
+<rect x="270" y="213" width="225" height="44" rx="5" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="1.2"/>
+<text x="286" y="231" fill="#4a0072" font-size="11" font-weight="700" font-family="Segoe UI,sans-serif">INSERT outbox_evento</text>
+<text x="286" y="247" fill="#7b1fa2" font-size="10" font-family="Segoe UI,sans-serif">OrigemRegistrada.v1 — status: pendente</text>
+
+<!-- ===== STEP 4: Ingestão → SistExt (aceite técnico) ===== -->
+<circle cx="17" cy="278" r="13" fill="#546e7a"/>
+<text x="17" y="282" text-anchor="middle" fill="white" font-size="10" font-weight="700" font-family="Segoe UI,sans-serif">4</text>
+<line x1="247" y1="278" x2="89" y2="278" stroke="#546e7a" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#f2-ah-s)"/>
+<text x="168" y="271" text-anchor="middle" fill="#546e7a" font-size="11" font-family="Segoe UI,sans-serif">202 Accepted — aceite técnico</text>
+<rect x="80" y="282" width="205" height="15" rx="3" fill="#ffe0b2" opacity="0.7"/>
+<text x="182" y="293" text-anchor="middle" fill="#e65100" font-size="9" font-family="Segoe UI,sans-serif">Ingestão NÃO decide elegibilidade aqui</text>
+
+<!-- ===== STEP 5: Ingestão → Broker ===== -->
+<circle cx="17" cy="325" r="13" fill="#455a64"/>
+<text x="17" y="329" text-anchor="middle" fill="white" font-size="10" font-weight="700" font-family="Segoe UI,sans-serif">5</text>
+<line x1="259" y1="325" x2="431" y2="325" stroke="#455a64" stroke-width="2" stroke-dasharray="7,3" marker-end="url(#f2-ah-k)"/>
+<text x="345" y="317" text-anchor="middle" fill="#455a64" font-size="11" font-weight="600" font-family="Segoe UI,sans-serif">OrigemRegistrada.v1</text>
+<rect x="308" y="325" width="74" height="14" rx="3" fill="#455a64" opacity="0.12"/>
+<text x="345" y="335" text-anchor="middle" fill="#455a64" font-size="9" font-family="Segoe UI,sans-serif">Outbox Worker</text>
+
+<!-- ===== STEP 6: Broker → Seleção ===== -->
+<circle cx="17" cy="375" r="13" fill="#bf360c"/>
+<text x="17" y="379" text-anchor="middle" fill="white" font-size="10" font-weight="700" font-family="Segoe UI,sans-serif">6</text>
+<line x1="444" y1="375" x2="616" y2="375" stroke="#bf360c" stroke-width="2" stroke-dasharray="7,3" marker-end="url(#f2-ah-o)"/>
+<text x="530" y="367" text-anchor="middle" fill="#bf360c" font-size="11" font-weight="600" font-family="Segoe UI,sans-serif">OrigemRegistrada.v1</text>
+
+<!-- ===== STEP 7: Seleção — aplica regras ===== -->
+<circle cx="17" cy="425" r="13" fill="#bf360c"/>
+<text x="17" y="429" text-anchor="middle" fill="white" font-size="10" font-weight="700" font-family="Segoe UI,sans-serif">7</text>
+<line x1="629" y1="425" x2="640" y2="425" stroke="#bf360c" stroke-width="1" stroke-dasharray="3,2"/>
+<rect x="640" y="408" width="250" height="46" rx="5" fill="#fbe9e7" stroke="#bf360c" stroke-width="1.2"/>
+<text x="656" y="426" fill="#7f0000" font-size="11" font-weight="700" font-family="Segoe UI,sans-serif">Aplica blocklist + quarentena</text>
+<text x="656" y="442" fill="#bf360c" font-size="10" font-family="Segoe UI,sans-serif">amostragem + prioridade nas regras materializadas</text>
+
+<!-- ===== STEP 8: Seleção — registra decisão ===== -->
+<circle cx="17" cy="478" r="13" fill="#bf360c"/>
+<text x="17" y="482" text-anchor="middle" fill="white" font-size="10" font-weight="700" font-family="Segoe UI,sans-serif">8</text>
+<line x1="629" y1="478" x2="640" y2="478" stroke="#bf360c" stroke-width="1" stroke-dasharray="3,2"/>
+<rect x="640" y="462" width="250" height="44" rx="5" fill="#fbe9e7" stroke="#bf360c" stroke-width="1.2"/>
+<text x="656" y="480" fill="#7f0000" font-size="11" font-weight="700" font-family="Segoe UI,sans-serif">Registra decisao_elegibilidade ✓</text>
+<text x="656" y="496" fill="#bf360c" font-size="10" font-family="Segoe UI,sans-serif">Grava oportunidade + outbox_evento</text>
+
+<!-- ===== STEP 9: Seleção → Broker ===== -->
+<circle cx="17" cy="530" r="13" fill="#455a64"/>
+<text x="17" y="534" text-anchor="middle" fill="white" font-size="10" font-weight="700" font-family="Segoe UI,sans-serif">9</text>
+<line x1="621" y1="530" x2="431" y2="530" stroke="#455a64" stroke-width="2" stroke-dasharray="7,3" marker-end="url(#f2-ah-k)"/>
+<text x="526" y="522" text-anchor="middle" fill="#455a64" font-size="11" font-weight="600" font-family="Segoe UI,sans-serif">OportunidadeCriada.v1</text>
+
+<!-- ===== STEP 10: Broker → Execução ===== -->
+<circle cx="17" cy="575" r="13" fill="#2e7d32"/>
+<text x="17" y="580" text-anchor="middle" fill="white" font-size="9" font-weight="700" font-family="Segoe UI,sans-serif">10</text>
+<line x1="444" y1="575" x2="801" y2="575" stroke="#2e7d32" stroke-width="2" stroke-dasharray="7,3" marker-end="url(#f2-ah-g)"/>
+<text x="622" y="567" text-anchor="middle" fill="#2e7d32" font-size="11" font-weight="600" font-family="Segoe UI,sans-serif">OportunidadeCriada.v1</text>
+
+<!-- ===== STEP 11: Execução — cria instância ===== -->
+<circle cx="17" cy="625" r="13" fill="#2e7d32"/>
+<text x="17" y="630" text-anchor="middle" fill="white" font-size="9" font-weight="700" font-family="Segoe UI,sans-serif">11</text>
+<line x1="814" y1="625" x2="825" y2="625" stroke="#2e7d32" stroke-width="1" stroke-dasharray="3,2"/>
+<rect x="825" y="609" width="265" height="46" rx="5" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.2"/>
+<text x="841" y="627" fill="#1b5e20" font-size="11" font-weight="700" font-family="Segoe UI,sans-serif">Cria instancia_pesquisa + token</text>
+<text x="841" y="643" fill="#2e7d32" font-size="10" font-family="Segoe UI,sans-serif">Materializa snapshot · Inbox (dedupe)</text>
+
+<!-- ===== STEP 12: Execução → Broker (instância disponível) ===== -->
+<circle cx="17" cy="678" r="13" fill="#455a64"/>
+<text x="17" y="683" text-anchor="middle" fill="white" font-size="9" font-weight="700" font-family="Segoe UI,sans-serif">12</text>
+<line x1="806" y1="678" x2="444" y2="678" stroke="#455a64" stroke-width="2" stroke-dasharray="7,3" marker-end="url(#f2-ah-k)"/>
+<text x="625" y="670" text-anchor="middle" fill="#455a64" font-size="11" font-weight="600" font-family="Segoe UI,sans-serif">InstanciaDisponivelParaEntrega.v1</text>
+
+<!-- ===== STEP 13: Broker → Entrega ===== -->
+<circle cx="17" cy="720" r="13" fill="#006064"/>
+<text x="17" y="725" text-anchor="middle" fill="white" font-size="9" font-weight="700" font-family="Segoe UI,sans-serif">13</text>
+<line x1="444" y1="720" x2="981" y2="720" stroke="#006064" stroke-width="2" stroke-dasharray="7,3" marker-end="url(#f2-ah-t)"/>
+<text x="712" y="712" text-anchor="middle" fill="#006064" font-size="11" font-weight="600" font-family="Segoe UI,sans-serif">InstanciaDisponivelParaEntrega.v1</text>
+
+<!-- ===== STEP 14: Entrega — cria convite ===== -->
+<circle cx="17" cy="768" r="13" fill="#006064"/>
+<text x="17" y="773" text-anchor="middle" fill="white" font-size="9" font-weight="700" font-family="Segoe UI,sans-serif">14</text>
+<line x1="994" y1="768" x2="1005" y2="768" stroke="#006064" stroke-width="1" stroke-dasharray="3,2"/>
+<rect x="1005" y="752" width="230" height="44" rx="5" fill="#e0f2f1" stroke="#006064" stroke-width="1.2"/>
+<text x="1021" y="770" fill="#004d40" font-size="11" font-weight="700" font-family="Segoe UI,sans-serif">Cria convite · Inbox (dedupe)</text>
+<text x="1021" y="786" fill="#006064" font-size="10" font-family="Segoe UI,sans-serif">Controla tentativas e retry</text>
+
+<!-- ===== STEP 15: Entrega → Plataforma ===== -->
+<circle cx="17" cy="820" r="13" fill="#4e342e"/>
+<text x="17" y="825" text-anchor="middle" fill="white" font-size="9" font-weight="700" font-family="Segoe UI,sans-serif">15</text>
+<line x1="994" y1="820" x2="1166" y2="820" stroke="#4e342e" stroke-width="2" marker-end="url(#f2-ah)"/>
+<text x="1080" y="812" text-anchor="middle" fill="#4e342e" font-size="11" font-weight="600" font-family="Segoe UI,sans-serif">Solicita envio do convite</text>
+<line x1="1166" y1="838" x2="994" y2="838" stroke="#4e342e" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#f2-ah-t)"/>
+<text x="1080" y="850" text-anchor="middle" fill="#546e7a" font-size="10" font-family="Segoe UI,sans-serif">Aceite / falha do provedor → retry se necessário</text>
+
+</svg>
+
+<div class="legenda">
+  <div class="leg"><div class="leg-sq" style="background:#546e7a"></div> Sistema Externo</div>
+  <div class="leg"><div class="leg-sq" style="background:#7b1fa2"></div> Ingestão</div>
+  <div class="leg"><div class="leg-sq" style="background:#455a64"></div> Broker (Kafka)</div>
+  <div class="leg"><div class="leg-sq" style="background:#bf360c"></div> Seleção</div>
+  <div class="leg"><div class="leg-sq" style="background:#2e7d32"></div> Execução</div>
+  <div class="leg"><div class="leg-sq" style="background:#006064"></div> Entrega</div>
+  <div class="leg"><div class="leg-sq" style="background:#4e342e"></div> Plat. Comunicação</div>
+  <div class="leg"><div class="leg-solid"></div> Chamada síncrona</div>
+  <div class="leg"><div class="leg-dash"></div> Evento assíncrono</div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Fluxo 1 — Criação e Publicação de Pesquisa</title>
+<style>
+* { box-sizing: border-box; }
+body { font-family: 'Segoe UI', sans-serif; background: #eef0f4; margin: 0; padding: 24px; }
+.card { background: white; border-radius: 12px; padding: 24px 28px; box-shadow: 0 2px 16px rgba(0,0,0,0.09); max-width: 1340px; margin: 0 auto; overflow-x: auto; }
+h1 { color: #1a1a2e; font-size: 19px; margin: 0 0 6px; }
+.badge { display: inline-block; background: #e3f2fd; color: #1565c0; font-size: 11px; font-weight: 700; padding: 2px 10px; border-radius: 20px; margin-left: 10px; vertical-align: middle; }
+.desc { color: #555; font-size: 13px; line-height: 1.6; margin-bottom: 18px; max-width: 900px; }
+.legenda { display: flex; gap: 22px; flex-wrap: wrap; border-top: 1px solid #eee; padding-top: 14px; margin-top: 10px; align-items: center; }
+.leg { display: flex; align-items: center; gap: 7px; font-size: 11px; color: #555; }
+.leg-sq { width: 13px; height: 13px; border-radius: 3px; flex-shrink: 0; }
+.leg-solid { width: 34px; height: 2px; background: #555; }
+.leg-dash { width: 34px; height: 0; border-top: 2px dashed #777; }
+.nav { font-size: 12px; margin-bottom: 16px; }
+.nav a { color: #1565c0; text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="nav"><a href="index.html">← Voltar ao índice</a></div>
+  <h1>🏗️ Fluxo 1 — Criação e Publicação de Pesquisa <span class="badge">Gatilho: Admin publica versão</span></h1>
+  <p class="desc">
+    A Gestão é a fonte de verdade da definição. Ao publicar uma versão, persiste o evento no <strong>Outbox</strong> antes de entregar ao broker.
+    Seleção, Execução e Apuração materializam localmente as partes da definição que precisam — cada uma no seu próprio banco — sem consultar a Gestão em runtime.
+    Ingestão e Entrega <strong>não</strong> consomem esse evento.
+  </p>
+
+<svg width="1280" height="750" viewBox="0 0 1280 750" style="display:block">
+<defs>
+  <marker id="f1-ah" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+    <path d="M1,0 L1,6 L9,3 z" fill="#444"/>
+  </marker>
+  <marker id="f1-ah-b" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+    <path d="M1,0 L1,6 L9,3 z" fill="#1565c0"/>
+  </marker>
+  <marker id="f1-ah-k" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+    <path d="M1,0 L1,6 L9,3 z" fill="#455a64"/>
+  </marker>
+  <marker id="f1-ah-o" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+    <path d="M1,0 L1,6 L9,3 z" fill="#bf360c"/>
+  </marker>
+  <marker id="f1-ah-g" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+    <path d="M1,0 L1,6 L9,3 z" fill="#2e7d32"/>
+  </marker>
+  <marker id="f1-ah-p" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+    <path d="M1,0 L1,6 L9,3 z" fill="#4a148c"/>
+  </marker>
+  <marker id="f1-ah-s" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+    <path d="M1,0 L1,6 L9,3 z" fill="#546e7a"/>
+  </marker>
+</defs>
+
+<!-- Background -->
+<rect width="1280" height="750" fill="#fafbfc" rx="8"/>
+
+<!-- Step number column bg -->
+<rect x="0" y="80" width="34" height="640" fill="#f0f2f5" rx="4"/>
+
+<!-- ===== PARTICIPANT HEADERS ===== -->
+<!-- cx=90 Admin -->
+<rect x="15" y="14" width="150" height="54" rx="8" fill="#546e7a"/>
+<text x="90" y="36" text-anchor="middle" fill="white" font-size="12" font-weight="700" font-family="Segoe UI,sans-serif">Admin / Gestor</text>
+<text x="90" y="56" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="10" font-family="Segoe UI,sans-serif">Interface administrativa</text>
+
+<!-- cx=285 Gestão -->
+<rect x="210" y="14" width="150" height="54" rx="8" fill="#1565c0"/>
+<text x="285" y="36" text-anchor="middle" fill="white" font-size="12" font-weight="700" font-family="Segoe UI,sans-serif">Gestão de Pesquisas</text>
+<text x="285" y="56" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="10" font-family="Segoe UI,sans-serif">Fonte de verdade · DB próprio</text>
+
+<!-- cx=530 Broker -->
+<rect x="455" y="14" width="150" height="54" rx="8" fill="#455a64"/>
+<text x="530" y="36" text-anchor="middle" fill="white" font-size="12" font-weight="700" font-family="Segoe UI,sans-serif">Broker (Kafka)</text>
+<text x="530" y="56" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="10" font-family="Segoe UI,sans-serif">Mensageria assíncrona</text>
+
+<!-- cx=730 Seleção -->
+<rect x="655" y="14" width="150" height="54" rx="8" fill="#bf360c"/>
+<text x="730" y="36" text-anchor="middle" fill="white" font-size="12" font-weight="700" font-family="Segoe UI,sans-serif">Seleção</text>
+<text x="730" y="56" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="10" font-family="Segoe UI,sans-serif">Elegibilidade · DB próprio</text>
+
+<!-- cx=920 Execução -->
+<rect x="845" y="14" width="150" height="54" rx="8" fill="#2e7d32"/>
+<text x="920" y="36" text-anchor="middle" fill="white" font-size="12" font-weight="700" font-family="Segoe UI,sans-serif">Execução</text>
+<text x="920" y="56" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="10" font-family="Segoe UI,sans-serif">Runtime · DB próprio</text>
+
+<!-- cx=1110 Apuração -->
+<rect x="1035" y="14" width="150" height="54" rx="8" fill="#4a148c"/>
+<text x="1110" y="36" text-anchor="middle" fill="white" font-size="12" font-weight="700" font-family="Segoe UI,sans-serif">Apuração</text>
+<text x="1110" y="56" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="10" font-family="Segoe UI,sans-serif">Resultados · DB próprio</text>
+
+<!-- ===== LIFELINES ===== -->
+<line x1="90"   y1="68" x2="90"   y2="720" stroke="#546e7a" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.3"/>
+<line x1="285"  y1="68" x2="285"  y2="720" stroke="#1565c0" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.3"/>
+<line x1="530"  y1="68" x2="530"  y2="720" stroke="#455a64" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.3"/>
+<line x1="730"  y1="68" x2="730"  y2="720" stroke="#bf360c" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.3"/>
+<line x1="920"  y1="68" x2="920"  y2="720" stroke="#2e7d32" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.3"/>
+<line x1="1110" y1="68" x2="1110" y2="720" stroke="#4a148c" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.3"/>
+
+<!-- Activation bar on Gestão (steps 1–4) -->
+<rect x="281" y="108" width="8" height="185" rx="2" fill="#1565c0" opacity="0.2"/>
+<!-- Activation bar on Broker (steps 4–10) -->
+<rect x="526" y="270" width="8" height="330" rx="2" fill="#455a64" opacity="0.15"/>
+
+<!-- ===== STEP 1: Admin → Gestão ===== -->
+<circle cx="17" cy="120" r="13" fill="#546e7a"/>
+<text x="17" y="124" text-anchor="middle" fill="white" font-size="10" font-weight="700" font-family="Segoe UI,sans-serif">1</text>
+<line x1="92" y1="120" x2="276" y2="120" stroke="#1565c0" stroke-width="2" marker-end="url(#f1-ah-b)"/>
+<text x="184" y="113" text-anchor="middle" fill="#1565c0" font-size="11" font-weight="600" font-family="Segoe UI,sans-serif">POST /pesquisas/publicar</text>
+
+<!-- ===== STEP 2: Gestão — valida ===== -->
+<circle cx="17" cy="175" r="13" fill="#1565c0"/>
+<text x="17" y="179" text-anchor="middle" fill="white" font-size="10" font-weight="700" font-family="Segoe UI,sans-serif">2</text>
+<line x1="289" y1="175" x2="300" y2="175" stroke="#1565c0" stroke-width="1" stroke-dasharray="3,2"/>
+<rect x="300" y="160" width="220" height="44" rx="5" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.2"/>
+<text x="316" y="178" fill="#0d47a1" font-size="11" font-weight="700" font-family="Segoe UI,sans-serif">Valida + versiona pesquisa</text>
+<text x="316" y="194" fill="#1565c0" font-size="10" font-family="Segoe UI,sans-serif">Grava pesquisa + versao_pesquisa no DB</text>
+
+<!-- ===== STEP 3: Gestão — outbox ===== -->
+<circle cx="17" cy="230" r="13" fill="#1565c0"/>
+<text x="17" y="234" text-anchor="middle" fill="white" font-size="10" font-weight="700" font-family="Segoe UI,sans-serif">3</text>
+<line x1="289" y1="230" x2="300" y2="230" stroke="#1565c0" stroke-width="1" stroke-dasharray="3,2"/>
+<rect x="300" y="215" width="220" height="44" rx="5" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.2"/>
+<text x="316" y="233" fill="#0d47a1" font-size="11" font-weight="700" font-family="Segoe UI,sans-serif">INSERT outbox_evento</text>
+<text x="316" y="249" fill="#1565c0" font-size="10" font-family="Segoe UI,sans-serif">status: pendente · Outbox Worker publicará</text>
+
+<!-- ===== STEP 4: Gestão → Broker ===== -->
+<circle cx="17" cy="285" r="13" fill="#455a64"/>
+<text x="17" y="289" text-anchor="middle" fill="white" font-size="10" font-weight="700" font-family="Segoe UI,sans-serif">4</text>
+<line x1="289" y1="285" x2="521" y2="285" stroke="#455a64" stroke-width="2" stroke-dasharray="7,3" marker-end="url(#f1-ah-k)"/>
+<text x="405" y="277" text-anchor="middle" fill="#455a64" font-size="11" font-weight="600" font-family="Segoe UI,sans-serif">PesquisaVersaoPublicada.v1</text>
+<!-- small kafka icon label -->
+<rect x="386" y="285" width="38" height="14" rx="3" fill="#455a64" opacity="0.12"/>
+<text x="405" y="295" text-anchor="middle" fill="#455a64" font-size="9" font-family="Segoe UI,sans-serif">Outbox Worker</text>
+
+<!-- ===== STEP 5: Broker → Seleção ===== -->
+<circle cx="17" cy="340" r="13" fill="#bf360c"/>
+<text x="17" y="344" text-anchor="middle" fill="white" font-size="10" font-weight="700" font-family="Segoe UI,sans-serif">5</text>
+<line x1="534" y1="340" x2="721" y2="340" stroke="#bf360c" stroke-width="2" stroke-dasharray="7,3" marker-end="url(#f1-ah-o)"/>
+<text x="627" y="332" text-anchor="middle" fill="#bf360c" font-size="11" font-weight="600" font-family="Segoe UI,sans-serif">PesquisaVersaoPublicada.v1</text>
+<rect x="726" y="333" width="8" height="52" rx="2" fill="#bf360c" opacity="0.2"/>
+
+<!-- ===== STEP 6: Seleção — materializa ===== -->
+<circle cx="17" cy="393" r="13" fill="#bf360c"/>
+<text x="17" y="397" text-anchor="middle" fill="white" font-size="10" font-weight="700" font-family="Segoe UI,sans-serif">6</text>
+<line x1="734" y1="393" x2="745" y2="393" stroke="#bf360c" stroke-width="1" stroke-dasharray="3,2"/>
+<rect x="745" y="378" width="225" height="44" rx="5" fill="#fbe9e7" stroke="#bf360c" stroke-width="1.2"/>
+<text x="761" y="396" fill="#7f0000" font-size="11" font-weight="700" font-family="Segoe UI,sans-serif">Materializa regras + blocklist</text>
+<text x="761" y="412" fill="#bf360c" font-size="10" font-family="Segoe UI,sans-serif">Registra inbox_evento (dedupe por message_id)</text>
+
+<!-- ===== STEP 7: Broker → Execução ===== -->
+<circle cx="17" cy="448" r="13" fill="#2e7d32"/>
+<text x="17" y="452" text-anchor="middle" fill="white" font-size="10" font-weight="700" font-family="Segoe UI,sans-serif">7</text>
+<line x1="534" y1="448" x2="911" y2="448" stroke="#2e7d32" stroke-width="2" stroke-dasharray="7,3" marker-end="url(#f1-ah-g)"/>
+<text x="722" y="440" text-anchor="middle" fill="#2e7d32" font-size="11" font-weight="600" font-family="Segoe UI,sans-serif">PesquisaVersaoPublicada.v1</text>
+<rect x="916" y="441" width="8" height="52" rx="2" fill="#2e7d32" opacity="0.2"/>
+
+<!-- ===== STEP 8: Execução — materializa ===== -->
+<circle cx="17" cy="501" r="13" fill="#2e7d32"/>
+<text x="17" y="505" text-anchor="middle" fill="white" font-size="10" font-weight="700" font-family="Segoe UI,sans-serif">8</text>
+<line x1="924" y1="501" x2="935" y2="501" stroke="#2e7d32" stroke-width="1" stroke-dasharray="3,2"/>
+<rect x="935" y="486" width="210" height="44" rx="5" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.2"/>
+<text x="951" y="504" fill="#1b5e20" font-size="11" font-weight="700" font-family="Segoe UI,sans-serif">Materializa snapshot base</text>
+<text x="951" y="520" fill="#2e7d32" font-size="10" font-family="Segoe UI,sans-serif">+ templates · Inbox (dedupe)</text>
+
+<!-- ===== STEP 9: Broker → Apuração ===== -->
+<circle cx="17" cy="556" r="13" fill="#4a148c"/>
+<text x="17" y="560" text-anchor="middle" fill="white" font-size="10" font-weight="700" font-family="Segoe UI,sans-serif">9</text>
+<line x1="534" y1="556" x2="1101" y2="556" stroke="#4a148c" stroke-width="2" stroke-dasharray="7,3" marker-end="url(#f1-ah-p)"/>
+<text x="817" y="548" text-anchor="middle" fill="#4a148c" font-size="11" font-weight="600" font-family="Segoe UI,sans-serif">PesquisaVersaoPublicada.v1</text>
+<rect x="1106" y="549" width="8" height="52" rx="2" fill="#4a148c" opacity="0.2"/>
+
+<!-- ===== STEP 10: Apuração — materializa ===== -->
+<circle cx="17" cy="610" r="13" fill="#4a148c"/>
+<text x="17" y="615" text-anchor="middle" fill="white" font-size="9" font-weight="700" font-family="Segoe UI,sans-serif">10</text>
+<line x1="1114" y1="610" x2="1125" y2="610" stroke="#4a148c" stroke-width="1" stroke-dasharray="3,2"/>
+<rect x="1125" y="595" width="148" height="44" rx="5" fill="#f3e5f5" stroke="#4a148c" stroke-width="1.2"/>
+<text x="1141" y="613" fill="#4a0072" font-size="11" font-weight="700" font-family="Segoe UI,sans-serif">Materializa critérios</text>
+<text x="1141" y="629" fill="#4a148c" font-size="10" font-family="Segoe UI,sans-serif">de cálculo · Inbox</text>
+
+<!-- ===== STEP 11: Gestão → Admin (return) ===== -->
+<circle cx="17" cy="668" r="13" fill="#546e7a"/>
+<text x="17" y="673" text-anchor="middle" fill="white" font-size="9" font-weight="700" font-family="Segoe UI,sans-serif">11</text>
+<line x1="277" y1="668" x2="99" y2="668" stroke="#546e7a" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#f1-ah-s)"/>
+<text x="185" y="661" text-anchor="middle" fill="#546e7a" font-size="11" font-family="Segoe UI,sans-serif">201 Created — Versão V1 publicada</text>
+
+<!-- ===== INGESTÃO / ENTREGA: não consomem ===== -->
+<rect x="37" y="700" width="1240" height="28" rx="5" fill="#fff8e1" stroke="#f9a825" stroke-width="1"/>
+<text x="657" y="719" text-anchor="middle" fill="#795548" font-size="11" font-family="Segoe UI,sans-serif">ℹ️  Ingestão e Entrega NÃO consomem o evento PesquisaVersaoPublicada — não precisam da definição em runtime</text>
+
+</svg>
+
+<div class="legenda">
+  <div class="leg"><div class="leg-sq" style="background:#546e7a"></div> Admin/Externo</div>
+  <div class="leg"><div class="leg-sq" style="background:#1565c0"></div> Gestão</div>
+  <div class="leg"><div class="leg-sq" style="background:#455a64"></div> Broker (Kafka)</div>
+  <div class="leg"><div class="leg-sq" style="background:#bf360c"></div> Seleção</div>
+  <div class="leg"><div class="leg-sq" style="background:#2e7d32"></div> Execução</div>
+  <div class="leg"><div class="leg-sq" style="background:#4a148c"></div> Apuração</div>
+  <div class="leg"><div class="leg-solid"></div> Chamada síncrona</div>
+  <div class="leg"><div class="leg-dash"></div> Evento assíncrono (broker)</div>
+</div>
+</div>
+</body>
+</html>

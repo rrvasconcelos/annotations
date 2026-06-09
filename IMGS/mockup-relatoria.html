@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Relatoria de Percepção — Mockup</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+    body { background: #f0f2f5; color: #1a1a2e; font-size: 13px; }
+
+    /* HEADER */
+    header {
+      background: #1a1a2e;
+      color: #fff;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    header h1 { font-size: 16px; font-weight: 600; }
+    header span { font-size: 11px; background: #3a3a5c; padding: 3px 8px; border-radius: 4px; }
+
+    /* FILTROS */
+    .filtros {
+      background: #fff;
+      padding: 14px 24px;
+      border-bottom: 1px solid #e0e0e0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: flex-end;
+    }
+    .filtro-grupo { display: flex; flex-direction: column; gap: 4px; }
+    .filtro-grupo label { font-size: 10px; font-weight: 600; color: #666; text-transform: uppercase; letter-spacing: 0.5px; }
+    .filtro-grupo select, .filtro-grupo input {
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 5px 10px;
+      font-size: 12px;
+      min-width: 140px;
+      background: #fafafa;
+    }
+    .btn-filtrar {
+      background: #1a1a2e;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 7px 18px;
+      font-size: 12px;
+      cursor: pointer;
+      align-self: flex-end;
+    }
+
+    /* AVISO MULTIMETRICA */
+    .aviso {
+      margin: 12px 24px 0;
+      background: #fff8e1;
+      border-left: 4px solid #f9a825;
+      padding: 8px 14px;
+      font-size: 12px;
+      border-radius: 0 4px 4px 0;
+      color: #7a5c00;
+    }
+
+    /* CARDS */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      padding: 16px 24px 0;
+    }
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 16px;
+      border: 1px solid #e8e8e8;
+    }
+    .card .label { font-size: 10px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+    .card .valor { font-size: 26px; font-weight: 700; color: #1a1a2e; }
+    .card .sub { font-size: 10px; color: #aaa; margin-top: 4px; }
+    .card.destaque .valor { color: #1565c0; }
+    .card.aviso-card .valor { color: #c62828; }
+
+    /* BLOCO METRICA */
+    .bloco-metrica {
+      margin: 16px 24px 0;
+      background: #fff;
+      border-radius: 8px;
+      border: 1px solid #e8e8e8;
+      overflow: hidden;
+    }
+    .bloco-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      border-bottom: 1px solid #eee;
+    }
+    .badge-metrica {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+    }
+    .badge-csat { background: #e3f2fd; color: #1565c0; }
+    .badge-nps  { background: #e8f5e9; color: #2e7d32; }
+    .badge-versao { font-size: 10px; background: #f3f4f6; color: #555; padding: 2px 8px; border-radius: 20px; }
+    .vigencia { font-size: 10px; color: #aaa; margin-left: auto; }
+
+    /* TABELA */
+    table { width: 100%; border-collapse: collapse; }
+    thead tr { background: #f8f9fa; }
+    th { padding: 8px 14px; text-align: left; font-size: 11px; font-weight: 700; color: #666; border-bottom: 2px solid #eee; text-transform: uppercase; letter-spacing: 0.4px; }
+    td { padding: 9px 14px; border-bottom: 1px solid #f0f0f0; font-size: 12px; vertical-align: middle; }
+    tr:hover td { background: #f9fbff; }
+
+    /* CANAL (linha pai) */
+    .linha-canal td { font-weight: 700; background: #f5f7ff; color: #1a1a2e; }
+    .linha-canal .icone-expand { margin-right: 6px; cursor: pointer; color: #888; }
+
+    /* SERVICO (linha filha) */
+    .linha-servico td:first-child { padding-left: 34px; color: #444; }
+
+    /* BARRA DE SCORE */
+    .barra-wrap { display: flex; align-items: center; gap: 8px; }
+    .barra-fundo { background: #eee; border-radius: 4px; height: 6px; width: 80px; overflow: hidden; }
+    .barra-fill { height: 6px; border-radius: 4px; }
+    .fill-csat { background: #1565c0; }
+    .fill-nps  { background: #2e7d32; }
+    .score-val { font-weight: 700; font-size: 13px; }
+    .score-csat { color: #1565c0; }
+    .score-nps  { color: #2e7d32; }
+
+    /* PAGINACAO / FOOTER */
+    .footer-tabela {
+      padding: 10px 16px;
+      font-size: 11px;
+      color: #aaa;
+      border-top: 1px solid #f0f0f0;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* LEGENDA QUEBRA SERIE */
+    .quebra-serie {
+      margin: 16px 24px 0;
+      background: #fce4ec;
+      border-left: 4px solid #c62828;
+      padding: 8px 14px;
+      font-size: 12px;
+      border-radius: 0 4px 4px 0;
+      color: #7f0000;
+    }
+    .quebra-serie strong { display: block; margin-bottom: 2px; }
+
+    .spacer { height: 24px; }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <h1>Relatoria de Percepção</h1>
+    <span>Apuração consolidada por canal, serviço, versão e métrica</span>
+  </header>
+
+  <!-- FILTROS -->
+  <div class="filtros">
+    <div class="filtro-grupo">
+      <label>Período início</label>
+      <input type="date" value="2026-01-01" />
+    </div>
+    <div class="filtro-grupo">
+      <label>Período fim</label>
+      <input type="date" value="2026-06-08" />
+    </div>
+    <div class="filtro-grupo">
+      <label>Canal</label>
+      <select>
+        <option>Todos</option>
+        <option selected>Canal A</option>
+        <option>Canal B</option>
+      </select>
+    </div>
+    <div class="filtro-grupo">
+      <label>Serviço</label>
+      <select>
+        <option>Todos</option>
+        <option>Serviço A</option>
+        <option>Serviço B</option>
+      </select>
+    </div>
+    <div class="filtro-grupo">
+      <label>Métrica</label>
+      <select>
+        <option selected>Todas</option>
+        <option>CSAT</option>
+        <option>NPS</option>
+        <option>NES</option>
+      </select>
+    </div>
+    <div class="filtro-grupo">
+      <label>Versão ⟵ populado pela API</label>
+      <select>
+        <option selected>Todas</option>
+        <option>V1 — CSAT (jan–mar/2026)</option>
+        <option>V2 — NPS (abr–hoje)</option>
+      </select>
+    </div>
+    <div class="filtro-grupo">
+      <label>Visualização</label>
+      <select>
+        <option selected>Por versão e métrica</option>
+        <option>Consolidado</option>
+      </select>
+    </div>
+    <button class="btn-filtrar">Aplicar filtros</button>
+  </div>
+
+  <!-- AVISO MULTIMETRICA -->
+  <div class="aviso">
+    ⚠️ O período selecionado contém <strong>2 métricas diferentes</strong> (CSAT e NPS). Os resultados são exibidos em <strong>blocos separados</strong> — não é possível somar indicadores de métricas distintas.
+  </div>
+
+  <!-- CARDS GERAIS -->
+  <div class="cards">
+    <div class="card">
+      <div class="label">Total de instâncias</div>
+      <div class="valor">2.840</div>
+      <div class="sub">V1 + V2 no período</div>
+    </div>
+    <div class="card destaque">
+      <div class="label">Total respondidas</div>
+      <div class="valor">2.187</div>
+      <div class="sub">Taxa geral: 77%</div>
+    </div>
+    <div class="card aviso-card">
+      <div class="label">Não respondidas</div>
+      <div class="valor">653</div>
+      <div class="sub">Expiradas + recusadas</div>
+    </div>
+    <div class="card">
+      <div class="label">Versões no período</div>
+      <div class="valor">2</div>
+      <div class="sub">V1 (CSAT) · V2 (NPS)</div>
+    </div>
+  </div>
+
+  <!-- ===== BLOCO CSAT V1 ===== -->
+  <div class="bloco-metrica" style="margin-top:20px">
+    <div class="bloco-header">
+      <span class="badge-metrica badge-csat">CSAT</span>
+      <span class="badge-versao">V1</span>
+      <span style="font-size:12px; color:#555">Score: média das notas (1–5)</span>
+      <span class="vigencia">Vigência: jan/2026 – mar/2026</span>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Canal / Serviço</th>
+          <th>Instâncias</th>
+          <th>Respondidas</th>
+          <th>Não respondidas</th>
+          <th>Taxa resposta</th>
+          <th>Score CSAT</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Canal A total -->
+        <tr class="linha-canal">
+          <td><span class="icone-expand">▾</span> Canal A</td>
+          <td>1.200</td>
+          <td>934</td>
+          <td>266</td>
+          <td>77,8%</td>
+          <td>
+            <div class="barra-wrap">
+              <div class="barra-fundo"><div class="barra-fill fill-csat" style="width:84%"></div></div>
+              <span class="score-val score-csat">4,2</span>
+            </div>
+          </td>
+        </tr>
+        <!-- Serviço A -->
+        <tr class="linha-servico">
+          <td>Serviço A</td>
+          <td>720</td>
+          <td>566</td>
+          <td>154</td>
+          <td>78,6%</td>
+          <td>
+            <div class="barra-wrap">
+              <div class="barra-fundo"><div class="barra-fill fill-csat" style="width:86%"></div></div>
+              <span class="score-val score-csat">4,3</span>
+            </div>
+          </td>
+        </tr>
+        <!-- Serviço B -->
+        <tr class="linha-servico">
+          <td>Serviço B</td>
+          <td>480</td>
+          <td>368</td>
+          <td>112</td>
+          <td>76,7%</td>
+          <td>
+            <div class="barra-wrap">
+              <div class="barra-fundo"><div class="barra-fill fill-csat" style="width:80%"></div></div>
+              <span class="score-val score-csat">4,0</span>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="footer-tabela">
+      <span>1–3 de 3 serviços · Canal A</span>
+      <span>Métrica: CSAT · Versão: V1 · jan–mar/2026</span>
+    </div>
+  </div>
+
+  <!-- ===== QUEBRA DE SÉRIE ===== -->
+  <div class="quebra-serie">
+    <strong>⚡ Quebra de série temporal — abr/2026</strong>
+    A partir de abr/2026, a pesquisa passou da métrica <strong>CSAT</strong> (escala 1–5) para <strong>NPS</strong> (escala –100 a +100). Os valores abaixo <strong>não são comparáveis</strong> com os do bloco anterior.
+  </div>
+
+  <!-- ===== BLOCO NPS V2 ===== -->
+  <div class="bloco-metrica" style="margin-top:12px">
+    <div class="bloco-header">
+      <span class="badge-metrica badge-nps">NPS</span>
+      <span class="badge-versao">V2</span>
+      <span style="font-size:12px; color:#555">Score: % Promotores − % Detratores</span>
+      <span class="vigencia">Vigência: abr/2026 – hoje</span>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Canal / Serviço</th>
+          <th>Instâncias</th>
+          <th>Respondidas</th>
+          <th>Não respondidas</th>
+          <th>Taxa resposta</th>
+          <th>Score NPS</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="linha-canal">
+          <td><span class="icone-expand">▾</span> Canal A</td>
+          <td>1.640</td>
+          <td>1.253</td>
+          <td>387</td>
+          <td>76,4%</td>
+          <td>
+            <div class="barra-wrap">
+              <div class="barra-fundo"><div class="barra-fill fill-nps" style="width:72%"></div></div>
+              <span class="score-val score-nps">+72</span>
+            </div>
+          </td>
+        </tr>
+        <tr class="linha-servico">
+          <td>Serviço A</td>
+          <td>900</td>
+          <td>697</td>
+          <td>203</td>
+          <td>77,4%</td>
+          <td>
+            <div class="barra-wrap">
+              <div class="barra-fundo"><div class="barra-fill fill-nps" style="width:75%"></div></div>
+              <span class="score-val score-nps">+75</span>
+            </div>
+          </td>
+        </tr>
+        <tr class="linha-servico">
+          <td>Serviço B</td>
+          <td>740</td>
+          <td>556</td>
+          <td>184</td>
+          <td>75,1%</td>
+          <td>
+            <div class="barra-wrap">
+              <div class="barra-fundo"><div class="barra-fill fill-nps" style="width:68%"></div></div>
+              <span class="score-val score-nps">+68</span>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="footer-tabela">
+      <span>1–3 de 3 serviços · Canal A</span>
+      <span>Métrica: NPS · Versão: V2 · abr–jun/2026</span>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+</body>
+</html>

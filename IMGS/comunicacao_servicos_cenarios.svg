@@ -1,0 +1,186 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1900" height="1080" viewBox="0 0 1900 1080" role="img" aria-labelledby="title desc">
+  <title id="title">Comunicacao entre servicos e cenarios</title>
+  <desc id="desc">Diagrama consolidado com servicos, tipos de comunicacao e cenarios principais do sistema de metricas de percepcao.</desc>
+
+  <defs>
+    <style>
+      .bg { fill: #f7f8fb; }
+      .panel { fill: #ffffff; stroke: #c9cfdd; stroke-width: 1.2; }
+      .service { fill: #e9f2ff; stroke: #4a6fa5; stroke-width: 1.6; }
+      .external { fill: #eefaf1; stroke: #3a7a4c; stroke-width: 1.4; }
+      .infra { fill: #fff4ea; stroke: #b0741a; stroke-width: 1.4; }
+      .title { font-family: "Segoe UI", Tahoma, Arial, sans-serif; font-size: 34px; font-weight: 700; fill: #1b2740; }
+      .subtitle { font-family: "Segoe UI", Tahoma, Arial, sans-serif; font-size: 18px; fill: #4f5f7d; }
+      .box-title { font-family: "Segoe UI", Tahoma, Arial, sans-serif; font-size: 18px; font-weight: 700; fill: #162238; }
+      .box-sub { font-family: "Segoe UI", Tahoma, Arial, sans-serif; font-size: 14px; fill: #33415c; }
+      .legend { font-family: "Segoe UI", Tahoma, Arial, sans-serif; font-size: 14px; fill: #22314f; }
+      .scenario { font-family: "Segoe UI", Tahoma, Arial, sans-serif; font-size: 15px; fill: #1f2b44; }
+      .scenario-title { font-family: "Segoe UI", Tahoma, Arial, sans-serif; font-size: 17px; font-weight: 700; fill: #162238; }
+      .arrow-sync { stroke: #1463b8; stroke-width: 2.8; fill: none; }
+      .arrow-async { stroke: #b25500; stroke-width: 2.8; fill: none; stroke-dasharray: 9 7; }
+      .arrow-data { stroke: #3f7b4f; stroke-width: 2.6; fill: none; }
+      .edge-label { font-family: "Segoe UI", Tahoma, Arial, sans-serif; font-size: 13px; fill: #172640; font-weight: 600; }
+      .legend-line { stroke-width: 3; }
+      .badge { fill: #1a73e8; }
+      .badge-text { font-family: "Segoe UI", Tahoma, Arial, sans-serif; font-size: 12px; font-weight: 700; fill: #ffffff; }
+    </style>
+
+    <marker id="arrowBlue" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L9,3 L0,6 z" fill="#1463b8" />
+    </marker>
+    <marker id="arrowOrange" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L9,3 L0,6 z" fill="#b25500" />
+    </marker>
+    <marker id="arrowGreen" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L9,3 L0,6 z" fill="#3f7b4f" />
+    </marker>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1900" height="1080" />
+
+  <text class="title" x="48" y="58">Comunicacao entre servicos e cenarios</text>
+  <text class="subtitle" x="48" y="90">Sistema de Metricas de Percepcao - visao consolidada de runtime</text>
+
+  <rect class="panel" x="40" y="120" width="1460" height="660" rx="14" />
+  <text class="box-title" x="62" y="156">Servicos internos</text>
+
+  <rect class="service" x="80" y="210" width="220" height="110" rx="10" />
+  <text class="box-title" x="104" y="248">Gestao de Pesquisas</text>
+  <text class="box-sub" x="104" y="272">Define e publica versoes</text>
+
+  <rect class="service" x="380" y="210" width="240" height="110" rx="10" />
+  <text class="box-title" x="405" y="248">Ingestao de Origens</text>
+  <text class="box-sub" x="405" y="272">Entrada e normalizacao</text>
+
+  <rect class="service" x="700" y="210" width="300" height="110" rx="10" />
+  <text class="box-title" x="726" y="248">Selecao e Elegibilidade</text>
+  <text class="box-sub" x="726" y="272">Decisao autoritativa</text>
+
+  <rect class="service" x="1080" y="210" width="260" height="110" rx="10" />
+  <text class="box-title" x="1106" y="248">Execucao de Pesquisas</text>
+  <text class="box-sub" x="1106" y="272">Instancia, token, resposta</text>
+
+  <rect class="service" x="540" y="500" width="230" height="110" rx="10" />
+  <text class="box-title" x="565" y="538">Entrega de Convites</text>
+  <text class="box-sub" x="565" y="562">Tentativa, retry, falha</text>
+
+  <rect class="service" x="860" y="500" width="240" height="110" rx="10" />
+  <text class="box-title" x="886" y="538">Apuracao Resultados</text>
+  <text class="box-sub" x="886" y="562">Calcula metrica</text>
+
+  <text class="box-title" x="62" y="384">Atores e dependencias externas</text>
+
+  <rect class="external" x="80" y="420" width="220" height="95" rx="10" />
+  <text class="box-title" x="104" y="458">Canal Digital</text>
+  <text class="box-sub" x="104" y="480">Consulta/submete resposta</text>
+
+  <rect class="external" x="80" y="560" width="220" height="95" rx="10" />
+  <text class="box-title" x="104" y="598">Origens Externas</text>
+  <text class="box-sub" x="104" y="620">API/arquivo autorizados</text>
+
+  <rect class="external" x="1260" y="420" width="220" height="95" rx="10" />
+  <text class="box-title" x="1285" y="458">SICLI/SIISO/LDAP</text>
+  <text class="box-sub" x="1285" y="480">Contexto para placeholders</text>
+
+  <rect class="infra" x="1260" y="560" width="220" height="95" rx="10" />
+  <text class="box-title" x="1285" y="598">Plataforma Comms</text>
+  <text class="box-sub" x="1285" y="620">Envio tecnico de convite</text>
+
+  <!-- Fluxos assincronos -->
+  <line class="arrow-async" x1="300" y1="615" x2="380" y2="615" marker-end="url(#arrowOrange)" />
+  <text class="edge-label" x="316" y="603">Evento/API/arquivo</text>
+
+  <line class="arrow-async" x1="620" y1="265" x2="700" y2="265" marker-end="url(#arrowOrange)" />
+  <text class="edge-label" x="634" y="253">Origem registrada (evento)</text>
+
+  <line class="arrow-async" x1="300" y1="265" x2="700" y2="235" marker-end="url(#arrowOrange)" />
+  <text class="edge-label" x="410" y="216">Publicacao versao (evento)</text>
+
+  <line class="arrow-async" x1="300" y1="280" x2="1080" y2="280" marker-end="url(#arrowOrange)" />
+  <text class="edge-label" x="560" y="314">Publicacao versao (evento)</text>
+
+  <line class="arrow-async" x1="300" y1="295" x2="860" y2="500" marker-end="url(#arrowOrange)" />
+  <text class="edge-label" x="560" y="430">Publicacao versao (evento)</text>
+
+  <line class="arrow-async" x1="1000" y1="295" x2="1080" y2="295" marker-end="url(#arrowOrange)" />
+  <text class="edge-label" x="1008" y="283">Oportunidade (async)</text>
+
+  <line class="arrow-async" x1="1210" y1="320" x2="655" y2="500" marker-end="url(#arrowOrange)" />
+  <text class="edge-label" x="858" y="432">Instancia criada (evento)</text>
+
+  <line class="arrow-async" x1="1210" y1="320" x2="980" y2="500" marker-end="url(#arrowOrange)" />
+  <text class="edge-label" x="1036" y="416">Resposta/n-resposta (evento)</text>
+
+  <!-- Fluxos sincronos -->
+  <line class="arrow-sync" x1="300" y1="458" x2="1080" y2="458" marker-end="url(#arrowBlue)" />
+  <text class="edge-label" x="584" y="446">HTTP API de Execucao</text>
+
+  <line class="arrow-sync" x1="1080" y1="350" x2="1000" y2="350" marker-end="url(#arrowBlue)" />
+  <text class="edge-label" x="1010" y="338">Consulta elegibilidade</text>
+  <text class="edge-label" x="1014" y="356">API HTTP ou gRPC</text>
+
+  <line class="arrow-data" x1="1260" y1="468" x2="1340" y2="320" marker-end="url(#arrowGreen)" />
+  <text class="edge-label" x="1302" y="404">API/LDAP sync</text>
+
+  <line class="arrow-sync" x1="770" y1="555" x2="1260" y2="608" marker-end="url(#arrowBlue)" />
+  <text class="edge-label" x="934" y="572">API provedor comunicacao</text>
+
+  <!-- Legenda -->
+  <rect class="panel" x="40" y="810" width="1460" height="220" rx="14" />
+  <text class="box-title" x="62" y="846">Legenda e principios</text>
+
+  <line class="legend-line" x1="70" y1="885" x2="150" y2="885" stroke="#1463b8" marker-end="url(#arrowBlue)" />
+  <text class="legend" x="165" y="891">Fluxo sincrono (request/response)</text>
+
+  <line class="legend-line" x1="70" y1="920" x2="150" y2="920" stroke="#b25500" stroke-dasharray="9 7" marker-end="url(#arrowOrange)" />
+  <text class="legend" x="165" y="926">Fluxo assincrono por evento</text>
+
+  <line class="legend-line" x1="70" y1="955" x2="150" y2="955" stroke="#3f7b4f" marker-end="url(#arrowGreen)" />
+  <text class="legend" x="165" y="961">Consulta de dados contextuais autorizados</text>
+
+  <text class="legend" x="560" y="885">1) Elegibilidade e decisao ficam na Selecao.</text>
+  <text class="legend" x="560" y="920">2) Execucao orquestra jornada digital e registra resposta bruta.</text>
+  <text class="legend" x="560" y="955">3) Apuracao calcula metrica de forma assincrona.</text>
+
+  <!-- Painel cenarios -->
+  <rect class="panel" x="1530" y="120" width="330" height="910" rx="14" />
+  <text class="box-title" x="1552" y="156">Cenarios</text>
+
+  <circle class="badge" cx="1565" cy="195" r="12" />
+  <text class="badge-text" x="1561" y="199">1</text>
+  <text class="scenario-title" x="1586" y="201">Publicacao</text>
+  <text class="scenario" x="1586" y="223">Gestao publica versao por evento</text>
+  <text class="scenario" x="1586" y="243">para Selecao, Execucao e Apuracao.</text>
+
+  <circle class="badge" cx="1565" cy="295" r="12" />
+  <text class="badge-text" x="1561" y="299">2</text>
+  <text class="scenario-title" x="1586" y="301">Origem assincrona</text>
+  <text class="scenario" x="1586" y="323">Origem -> Ingestao -> Selecao</text>
+  <text class="scenario" x="1586" y="343">Se elegivel: oportunidade para Execucao.</text>
+
+  <circle class="badge" cx="1565" cy="395" r="12" />
+  <text class="badge-text" x="1561" y="399">3</text>
+  <text class="scenario-title" x="1586" y="401">Jornada digital</text>
+  <text class="scenario" x="1586" y="423">Canal chama Execucao (HTTP).</text>
+  <text class="scenario" x="1586" y="443">Execucao consulta Selecao</text>
+  <text class="scenario" x="1586" y="463">(API HTTP ou gRPC).</text>
+
+  <circle class="badge" cx="1565" cy="525" r="12" />
+  <text class="badge-text" x="1561" y="529">4</text>
+  <text class="scenario-title" x="1586" y="531">Resposta e apuracao</text>
+  <text class="scenario" x="1586" y="553">Execucao registra resposta e</text>
+  <text class="scenario" x="1586" y="573">publica evento para Apuracao.</text>
+
+  <circle class="badge" cx="1565" cy="625" r="12" />
+  <text class="badge-text" x="1561" y="629">5</text>
+  <text class="scenario-title" x="1586" y="631">Convite</text>
+  <text class="scenario" x="1586" y="653">Execucao publica instancia</text>
+  <text class="scenario" x="1586" y="673">para Entrega; Entrega envia via</text>
+  <text class="scenario" x="1586" y="693">plataforma de comunicacao.</text>
+
+  <text class="legend" x="1552" y="760">Observacao:</text>
+  <text class="legend" x="1552" y="784">No desenho arquitetural atual,</text>
+  <text class="legend" x="1552" y="806">Execucao -> Selecao permite</text>
+  <text class="legend" x="1552" y="828">API HTTP ou gRPC no fluxo</text>
+  <text class="legend" x="1552" y="850">sincrono de elegibilidade digital.</text>
+</svg>

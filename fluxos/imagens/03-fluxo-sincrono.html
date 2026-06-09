@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Fluxo 3 — Canal Digital: Solicitar e Responder Pesquisa</title>
+<style>
+* { box-sizing: border-box; }
+body { font-family: 'Segoe UI', sans-serif; background: #eef0f4; margin: 0; padding: 24px; }
+.card { background: white; border-radius: 12px; padding: 24px 28px; box-shadow: 0 2px 16px rgba(0,0,0,0.09); max-width: 1340px; margin: 0 auto; overflow-x: auto; }
+h1 { color: #1a1a2e; font-size: 19px; margin: 0 0 6px; }
+.badge { display: inline-block; background: #e8f5e9; color: #2e7d32; font-size: 11px; font-weight: 700; padding: 2px 10px; border-radius: 20px; margin-left: 10px; vertical-align: middle; }
+.badge2 { display: inline-block; background: #fff8e1; color: #f57f17; font-size: 11px; font-weight: 700; padding: 2px 10px; border-radius: 20px; margin-left: 6px; vertical-align: middle; }
+.desc { color: #555; font-size: 13px; line-height: 1.6; margin-bottom: 18px; max-width: 900px; }
+.legenda { display: flex; gap: 22px; flex-wrap: wrap; border-top: 1px solid #eee; padding-top: 14px; margin-top: 10px; align-items: center; }
+.leg { display: flex; align-items: center; gap: 7px; font-size: 11px; color: #555; }
+.leg-sq { width: 13px; height: 13px; border-radius: 3px; flex-shrink: 0; }
+.leg-solid { width: 34px; height: 2px; background: #555; }
+.leg-dash { width: 34px; height: 0; border-top: 2px dashed #777; }
+.nav { font-size: 12px; margin-bottom: 16px; }
+.nav a { color: #1565c0; text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="nav"><a href="index.html">← Voltar ao índice</a></div>
+  <h1>📱 Fluxo 3 — Canal Digital: Solicitar e Responder Pesquisa
+    <span class="badge">Fase 1: Solicitar</span>
+    <span class="badge2">Fase 2: Responder</span>
+  </h1>
+  <p class="desc">
+    Fluxo síncrono de duas fases. Na <strong>Fase 1</strong>, o canal solicita a pesquisa ao fim da jornada: a Execução consulta a Seleção em tempo real, resolve placeholders via fontes corporativas e retorna a pesquisa materializada.
+    Na <strong>Fase 2</strong>, o respondente envia a resposta: a Execução valida, persiste e confirma ao canal <strong>imediatamente</strong> — sem aguardar a Apuração.
+    A Apuração processa de forma assíncrona via broker.
+  </p>
+
+<svg width="1280" height="1010" viewBox="0 0 1280 1010" style="display:block">
+<defs>
+  <marker id="f3-ah" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+    <path d="M1,0 L1,6 L9,3 z" fill="#444"/>
+  </marker>
+  <marker id="f3-ah-s" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+    <path d="M1,0 L1,6 L9,3 z" fill="#546e7a"/>
+  </marker>
+  <marker id="f3-ah-g" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+    <path d="M1,0 L1,6 L9,3 z" fill="#2e7d32"/>
+  </marker>
+  <marker id="f3-ah-o" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+    <path d="M1,0 L1,6 L9,3 z" fill="#bf360c"/>
+  </marker>
+  <marker id="f3-ah-y" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+    <path d="M1,0 L1,6 L9,3 z" fill="#e65100"/>
+  </marker>
+  <marker id="f3-ah-k" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+    <path d="M1,0 L1,6 L9,3 z" fill="#455a64"/>
+  </marker>
+  <marker id="f3-ah-p" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+    <path d="M1,0 L1,6 L9,3 z" fill="#4a148c"/>
+  </marker>
+</defs>
+
+<rect width="1280" height="1010" fill="#fafbfc" rx="8"/>
+<rect x="0" y="80" width="34" height="900" fill="#f0f2f5" rx="4"/>
+
+<!-- ===== PARTICIPANT HEADERS (6 participants) ===== -->
+<!-- cx=90 Canal Digital -->
+<rect x="18" y="14" width="144" height="54" rx="8" fill="#546e7a"/>
+<text x="90" y="35" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="Segoe UI,sans-serif">Canal Digital</text>
+<text x="90" y="56" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="10" font-family="Segoe UI,sans-serif">App / Web / etc.</text>
+
+<!-- cx=290 Execução -->
+<rect x="218" y="14" width="144" height="54" rx="8" fill="#2e7d32"/>
+<text x="290" y="35" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="Segoe UI,sans-serif">Execução</text>
+<text x="290" y="56" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="10" font-family="Segoe UI,sans-serif">Runtime · instância · snapshot</text>
+
+<!-- cx=490 Seleção -->
+<rect x="418" y="14" width="144" height="54" rx="8" fill="#bf360c"/>
+<text x="490" y="35" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="Segoe UI,sans-serif">Seleção</text>
+<text x="490" y="56" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="10" font-family="Segoe UI,sans-serif">Elegibilidade síncrona</text>
+
+<!-- cx=690 SICLI/SIISO/LDAP -->
+<rect x="618" y="14" width="144" height="54" rx="8" fill="#e65100"/>
+<text x="690" y="35" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="Segoe UI,sans-serif">SICLI/SIISO/LDAP</text>
+<text x="690" y="56" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="10" font-family="Segoe UI,sans-serif">Contexto p/ placeholders</text>
+
+<!-- cx=890 Broker -->
+<rect x="818" y="14" width="144" height="54" rx="8" fill="#455a64"/>
+<text x="890" y="35" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="Segoe UI,sans-serif">Broker (Kafka)</text>
+<text x="890" y="56" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="10" font-family="Segoe UI,sans-serif">Mensageria assíncrona</text>
+
+<!-- cx=1090 Apuração -->
+<rect x="1018" y="14" width="144" height="54" rx="8" fill="#4a148c"/>
+<text x="1090" y="35" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="Segoe UI,sans-serif">Apuração</text>
+<text x="1090" y="56" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="10" font-family="Segoe UI,sans-serif">Calcula resultado · DB próprio</text>
+
+<!-- ===== LIFELINES ===== -->
+<line x1="90"   y1="68" x2="90"   y2="980" stroke="#546e7a" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.28"/>
+<line x1="290"  y1="68" x2="290"  y2="980" stroke="#2e7d32" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.28"/>
+<line x1="490"  y1="68" x2="490"  y2="980" stroke="#bf360c" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.28"/>
+<line x1="690"  y1="68" x2="690"  y2="980" stroke="#e65100" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.28"/>
+<line x1="890"  y1="68" x2="890"  y2="980" stroke="#455a64" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.28"/>
+<line x1="1090" y1="68" x2="1090" y2="980" stroke="#4a148c" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.28"/>
+
+<!-- Activation bars -->
+<rect x="286" y="108" width="8" height="450" rx="2" fill="#2e7d32" opacity="0.15"/>
+<rect x="486" y="240" width="8" height="125" rx="2" fill="#bf360c" opacity="0.15"/>
+<rect x="686" y="370" width="8" height="80" rx="2" fill="#e65100" opacity="0.15"/>
+<rect x="886" y="785" width="8" height="135" rx="2" fill="#455a64" opacity="0.13"/>
+<rect x="1086" y="865" width="8" height="70" rx="2" fill="#4a148c" opacity="0.15"/>
+
+<!-- ======================================================= -->
+<!--   FASE 1 — SOLICITAR PESQUISA                          -->
+<!-- ======================================================= -->
+<rect x="37" y="92" width="1236" height="22" rx="4" fill="#e8f5e9"/>
+<text x="655" y="107" text-anchor="middle" fill="#2e7d32" font-size="12" font-weight="700" font-family="Segoe UI,sans-serif">FASE 1 — Solicitar pesquisa (fluxo síncrono)</text>
+
+<!-- STEP 1: Canal → Execução -->
+<circle cx="17" cy="132" r="13" fill="#546e7a"/>
+<text x="17" y="136" text-anchor="middle" fill="white" font-size="10" font-weight="700" font-family="Segoe UI,sans-serif">1</text>
+<line x1="92" y1="132" x2="281" y2="132" stroke="#2e7d32" stroke-width="2" marker-end="url(#f3-ah-g)"/>
+<text x="186" y="125" text-anchor="middle" fill="#2e7d32" font-size="11" font-weight="600" font-family="Segoe UI,sans-serif">GET /execucao/pesquisa?canal=A&amp;servico=X</text>
+
+<!-- STEP 2: Execução — verifica -->
+<circle cx="17" cy="182" r="13" fill="#2e7d32"/>
+<text x="17" y="186" text-anchor="middle" fill="white" font-size="10" font-weight="700" font-family="Segoe UI,sans-serif">2</text>
+<line x1="294" y1="182" x2="305" y2="182" stroke="#2e7d32" stroke-width="1" stroke-dasharray="3,2"/>
+<rect x="305" y="167" width="220" height="44" rx="5" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.2"/>
+<text x="321" y="185" fill="#1b5e20" font-size="11" font-weight="700" font-family="Segoe UI,sans-serif">Verifica instância existente</text>
+<text x="321" y="201" fill="#2e7d32" font-size="10" font-family="Segoe UI,sans-serif">Nenhuma ativa — precisa consultar Seleção</text>
+
+<!-- STEP 3: Execução → Seleção (sync) -->
+<circle cx="17" cy="240" r="13" fill="#bf360c"/>
+<text x="17" y="244" text-anchor="middle" fill="white" font-size="10" font-weight="700" font-family="Segoe UI,sans-serif">3</text>
+<line x1="294" y1="240" x2="481" y2="240" stroke="#bf360c" stroke-width="2" marker-end="url(#f3-ah-o)"/>
+<text x="387" y="233" text-anchor="middle" fill="#bf360c" font-size="11" font-weight="600" font-family="Segoe UI,sans-serif">GET /selecao/elegibilidade (sync)</text>
+<!-- sync indicator -->
+<rect x="356" y="240" width="62" height="13" rx="3" fill="#bf360c" opacity="0.12"/>
+<text x="387" y="250" text-anchor="middle" fill="#bf360c" font-size="9" font-family="Segoe UI,sans-serif">⏱ síncrono — canal aguarda</text>
+
+<!-- STEP 4: Seleção — aplica regras -->
+<circle cx="17" cy="288" r="13" fill="#bf360c"/>
+<text x="17" y="292" text-anchor="middle" fill="white" font-size="10" font-weight="700" font-family="Segoe UI,sans-serif">4</text>
+<line x1="494" y1="288" x2="505" y2="288" stroke="#bf360c" stroke-width="1" stroke-dasharray="3,2"/>
+<rect x="505" y="273" width="215" height="44" rx="5" fill="#fbe9e7" stroke="#bf360c" stroke-width="1.2"/>
+<text x="521" y="291" fill="#7f0000" font-size="11" font-weight="700" font-family="Segoe UI,sans-serif">Aplica regras materializadas</text>
+<text x="521" y="307" fill="#bf360c" font-size="10" font-family="Segoe UI,sans-serif">blocklist + quarentena + amostragem</text>
+
+<!-- STEP 5: Seleção → Execução (retorno sync) -->
+<circle cx="17" cy="342" r="13" fill="#2e7d32"/>
+<text x="17" y="346" text-anchor="middle" fill="white" font-size="10" font-weight="700" font-family="Segoe UI,sans-serif">5</text>
+<line x1="482" y1="342" x2="298" y2="342" stroke="#2e7d32" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#f3-ah-g)"/>
+<text x="390" y="335" text-anchor="middle" fill="#2e7d32" font-size="11" font-family="Segoe UI,sans-serif">Elegível ✓ — pesquisa V2 autorizada</text>
+
+<!-- STEP 6: Execução → SICLI/SIISO/LDAP -->
+<circle cx="17" cy="392" r="13" fill="#e65100"/>
+<text x="17" y="396" text-anchor="middle" fill="white" font-size="10" font-weight="700" font-family="Segoe UI,sans-serif">6</text>
+<line x1="294" y1="392" x2="681" y2="392" stroke="#e65100" stroke-width="2" marker-end="url(#f3-ah-y)"/>
+<text x="487" y="384" text-anchor="middle" fill="#e65100" font-size="11" font-weight="600" font-family="Segoe UI,sans-serif">Resolve placeholders autorizados</text>
+
+<!-- STEP 7: SICLI → Execução (retorno) -->
+<circle cx="17" cy="438" r="13" fill="#e65100"/>
+<text x="17" y="442" text-anchor="middle" fill="white" font-size="10" font-weight="700" font-family="Segoe UI,sans-serif">7</text>
+<line x1="682" y1="438" x2="298" y2="438" stroke="#e65100" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#f3-ah-y)"/>
+<text x="487" y="431" text-anchor="middle" fill="#e65100" font-size="11" font-family="Segoe UI,sans-serif">Dados contextuais resolvidos</text>
+<rect x="410" y="438" width="154" height="14" rx="3" fill="#fff3e0" opacity="0.85"/>
+<text x="487" y="449" text-anchor="middle" fill="#e65100" font-size="9" font-family="Segoe UI,sans-serif">Minimização: somente PII necessário</text>
+
+<!-- STEP 8: Execução — cria instância e snapshot -->
+<circle cx="17" cy="492" r="13" fill="#2e7d32"/>
+<text x="17" y="496" text-anchor="middle" fill="white" font-size="10" font-weight="700" font-family="Segoe UI,sans-serif">8</text>
+<line x1="294" y1="492" x2="305" y2="492" stroke="#2e7d32" stroke-width="1" stroke-dasharray="3,2"/>
+<rect x="305" y="476" width="245" height="46" rx="5" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.2"/>
+<text x="321" y="494" fill="#1b5e20" font-size="11" font-weight="700" font-family="Segoe UI,sans-serif">Cria instancia + token (opaco)</text>
+<text x="321" y="510" fill="#2e7d32" font-size="10" font-family="Segoe UI,sans-serif">Materializa snapshot com placeholders resolvidos</text>
+
+<!-- STEP 9: Execução → Canal (pesquisa materializada) -->
+<circle cx="17" cy="548" r="13" fill="#546e7a"/>
+<text x="17" y="552" text-anchor="middle" fill="white" font-size="10" font-weight="700" font-family="Segoe UI,sans-serif">9</text>
+<line x1="282" y1="548" x2="98" y2="548" stroke="#546e7a" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#f3-ah-s)"/>
+<text x="190" y="541" text-anchor="middle" fill="#546e7a" font-size="11" font-family="Segoe UI,sans-serif">200 OK — pesquisa materializada + token</text>
+
+<!-- ======================================================= -->
+<!--   SEPARADOR FASE 2                                      -->
+<!-- ======================================================= -->
+<rect x="37" y="575" width="1236" height="22" rx="4" fill="#fff8e1"/>
+<text x="655" y="590" text-anchor="middle" fill="#e65100" font-size="12" font-weight="700" font-family="Segoe UI,sans-serif">FASE 2 — Respondente submete resposta (fluxo síncrono + async)</text>
+
+<!-- STEP 10: Canal → Execução (submete resposta) -->
+<circle cx="17" cy="617" r="13" fill="#2e7d32"/>
+<text x="17" y="622" text-anchor="middle" fill="white" font-size="9" font-weight="700" font-family="Segoe UI,sans-serif">10</text>
+<line x1="92" y1="617" x2="281" y2="617" stroke="#2e7d32" stroke-width="2" marker-end="url(#f3-ah-g)"/>
+<text x="186" y="610" text-anchor="middle" fill="#2e7d32" font-size="11" font-weight="600" font-family="Segoe UI,sans-serif">POST /execucao/resposta {token + respostas}</text>
+
+<!-- STEP 11: Execução — valida token -->
+<circle cx="17" cy="666" r="13" fill="#2e7d32"/>
+<text x="17" y="671" text-anchor="middle" fill="white" font-size="9" font-weight="700" font-family="Segoe UI,sans-serif">11</text>
+<line x1="294" y1="666" x2="305" y2="666" stroke="#2e7d32" stroke-width="1" stroke-dasharray="3,2"/>
+<rect x="305" y="651" width="230" height="44" rx="5" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.2"/>
+<text x="321" y="669" fill="#1b5e20" font-size="11" font-weight="700" font-family="Segoe UI,sans-serif">Valida token + status + expiração</text>
+<text x="321" y="685" fill="#2e7d32" font-size="10" font-family="Segoe UI,sans-serif">Verifica limite de respostas (controle concorrência)</text>
+
+<!-- STEP 12: Execução — grava resposta -->
+<circle cx="17" cy="720" r="13" fill="#2e7d32"/>
+<text x="17" y="725" text-anchor="middle" fill="white" font-size="9" font-weight="700" font-family="Segoe UI,sans-serif">12</text>
+<line x1="294" y1="720" x2="305" y2="720" stroke="#2e7d32" stroke-width="1" stroke-dasharray="3,2"/>
+<rect x="305" y="704" width="230" height="46" rx="5" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.2"/>
+<text x="321" y="722" fill="#1b5e20" font-size="11" font-weight="700" font-family="Segoe UI,sans-serif">Grava resposta_bruta no DB</text>
+<text x="321" y="738" fill="#2e7d32" font-size="10" font-family="Segoe UI,sans-serif">INSERT outbox_evento RespostaRegistrada.v1</text>
+
+<!-- STEP 13: Execução → Canal (confirmação imediata) -->
+<circle cx="17" cy="773" r="13" fill="#546e7a"/>
+<text x="17" y="778" text-anchor="middle" fill="white" font-size="9" font-weight="700" font-family="Segoe UI,sans-serif">13</text>
+<line x1="282" y1="773" x2="98" y2="773" stroke="#546e7a" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#f3-ah-s)"/>
+<text x="190" y="766" text-anchor="middle" fill="#546e7a" font-size="11" font-family="Segoe UI,sans-serif">200 OK — Resposta registrada</text>
+<rect x="100" y="773" width="178" height="15" rx="3" fill="#fff8e1" opacity="0.9"/>
+<text x="189" y="784" text-anchor="middle" fill="#f57f17" font-size="9" font-family="Segoe UI,sans-serif">⚡ Confirmação sem aguardar Apuração</text>
+
+<!-- STEP 14: Execução → Broker (outbox worker) -->
+<circle cx="17" cy="820" r="13" fill="#455a64"/>
+<text x="17" y="825" text-anchor="middle" fill="white" font-size="9" font-weight="700" font-family="Segoe UI,sans-serif">14</text>
+<line x1="294" y1="820" x2="881" y2="820" stroke="#455a64" stroke-width="2" stroke-dasharray="7,3" marker-end="url(#f3-ah-k)"/>
+<text x="587" y="812" text-anchor="middle" fill="#455a64" font-size="11" font-weight="600" font-family="Segoe UI,sans-serif">RespostaRegistrada.v1 (via Outbox Worker)</text>
+
+<!-- STEP 15: Broker → Apuração -->
+<circle cx="17" cy="867" r="13" fill="#4a148c"/>
+<text x="17" y="872" text-anchor="middle" fill="white" font-size="9" font-weight="700" font-family="Segoe UI,sans-serif">15</text>
+<line x1="886" y1="867" x2="1081" y2="867" stroke="#4a148c" stroke-width="2" stroke-dasharray="7,3" marker-end="url(#f3-ah-p)"/>
+<text x="983" y="859" text-anchor="middle" fill="#4a148c" font-size="11" font-weight="600" font-family="Segoe UI,sans-serif">RespostaRegistrada.v1</text>
+
+<!-- STEP 16: Apuração — calcula -->
+<circle cx="17" cy="920" r="13" fill="#4a148c"/>
+<text x="17" y="925" text-anchor="middle" fill="white" font-size="9" font-weight="700" font-family="Segoe UI,sans-serif">16</text>
+<line x1="1094" y1="920" x2="1105" y2="920" stroke="#4a148c" stroke-width="1" stroke-dasharray="3,2"/>
+<rect x="1105" y="904" width="168" height="46" rx="5" fill="#f3e5f5" stroke="#4a148c" stroke-width="1.2"/>
+<text x="1121" y="922" fill="#4a0072" font-size="11" font-weight="700" font-family="Segoe UI,sans-serif">Calcula resultado</text>
+<text x="1121" y="938" fill="#4a148c" font-size="10" font-family="Segoe UI,sans-serif">Atualiza agregado_pesquisa</text>
+
+<!-- Importante: Apuração NÃO acessa DB da Execução -->
+<rect x="37" y="970" width="1236" height="26" rx="5" fill="#fce4ec" stroke="#c62828" stroke-width="1"/>
+<text x="655" y="987" text-anchor="middle" fill="#7f0000" font-size="11" font-family="Segoe UI,sans-serif">⚠️  Apuração consome somente eventos publicados pela Execução — NUNCA acessa o banco de dados da Execução diretamente</text>
+
+</svg>
+
+<div class="legenda">
+  <div class="leg"><div class="leg-sq" style="background:#546e7a"></div> Canal Digital</div>
+  <div class="leg"><div class="leg-sq" style="background:#2e7d32"></div> Execução</div>
+  <div class="leg"><div class="leg-sq" style="background:#bf360c"></div> Seleção</div>
+  <div class="leg"><div class="leg-sq" style="background:#e65100"></div> SICLI/SIISO/LDAP</div>
+  <div class="leg"><div class="leg-sq" style="background:#455a64"></div> Broker (Kafka)</div>
+  <div class="leg"><div class="leg-sq" style="background:#4a148c"></div> Apuração</div>
+  <div class="leg"><div class="leg-solid"></div> Chamada síncrona</div>
+  <div class="leg"><div class="leg-dash"></div> Evento assíncrono</div>
+</div>
+</div>
+</body>
+</html>
